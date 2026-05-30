@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import * as Icons from 'lucide-react'
 import type { Course } from '@/types'
 
+
 const gradients = [
   'from-violet-900/40 via-zinc-900 to-zinc-900',
   'from-blue-900/40 via-zinc-900 to-zinc-900',
@@ -12,7 +13,7 @@ const gradients = [
 ]
 
 export default function CourseTile({ course, index }: { course: Course; index: number }) {
-  const Icon = (Icons as any)[course.icon_name] ?? Icons.BookOpen
+  const Icon = ((Icons as unknown as Record<string, (props: { className?: string }) => React.ReactElement>)[course.icon_name] ?? Icons.BookOpen)
   const [width, setWidth] = useState(0)
   const gradient = gradients[index % gradients.length]
 
