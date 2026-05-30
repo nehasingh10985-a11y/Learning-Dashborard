@@ -1,65 +1,92 @@
-import Image from "next/image";
+import { supabase } from '@/lib/supabase'
+import { Suspense } from 'react'
+import Sidebar from '@/components/Sidebar'
+import HeroTile from '@/components/HeroTile'
+import ActivityTile from '@/components/ActivityTile'
+import CourseGrid from '@/components/CourseGrid'
+import OverallProgressTile from '@/components/OverallProgressTile'
+import { Search, Bell } from 'lucide-react'
 
-export default function Home() {
+export default async function Dashboard() {
+  const { data: courses, error } = await supabase
+    .from('courses')
+    .select('*')
+    .order('created_at', { ascending: true })
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+    <div className="flex h-screen bg-[#09090b] overflow-hidden relative">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px]
+                      bg-violet-600/10 rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px]
+                      bg-indigo-600/8 rounded-full blur-[100px] pointer-events-none z-0" />
+
+      <Sidebar />
+
+      <main className="flex-1 overflow-y-auto relative z-10 pb-24 md:pb-0">
+        <header className="sticky top-0 z-20 bg-[#09090b]/80 backdrop-blur-xl border-b border-zinc-800/50 px-6 py-4">
+          <div className="flex items-center gap-4">
+            <div className="flex-1 max-w-md relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <input
+                type="text"
+                placeholder="Search courses, topics..."
+                className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl
+                           pl-10 pr-4 py-2 text-sm text-zinc-300 placeholder:text-zinc-600
+                           focus:outline-none focus:border-violet-500/50 focus:bg-zinc-900
+                           transition-all"
+              />
+            </div>
+            <div className="flex items-center gap-3 ml-auto">
+              <button className="relative w-9 h-9 rounded-xl bg-zinc-900 border border-zinc-800
+                                 flex items-center justify-center hover:border-zinc-700 transition-colors">
+                <Bell className="w-4 h-4 text-zinc-400" />
+                <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-violet-500 rounded-full" />
+              </button>
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600
+                                flex items-center justify-center text-sm font-bold shadow-lg shadow-violet-500/20">
+                  N
+                </div>
+                <div className="hidden md:block">
+                  <p className="text-xs font-medium text-white leading-none">Neha</p>
+                  <p className="text-[10px] text-zinc-500 mt-0.5">Pro Plan</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div className="p-4 md:p-6 lg:p-8">
+          <div className="mb-6">
+            <p className="text-zinc-500 text-sm">Good evening ✨</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-white mt-0.5">
+              Welcome back, Neha 👋
+            </h1>
+          </div>
+
+          <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto">
+            <HeroTile />
+            <ActivityTile />
+            <OverallProgressTile courses={courses ?? []} />
+
+            <Suspense fallback={
+              <div className="col-span-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-40 rounded-2xl bg-zinc-900 animate-pulse border border-zinc-800" />
+                ))}
+              </div>
+            }>
+              {error ? (
+                <div className="col-span-full rounded-2xl bg-red-950/30 border border-red-800/50 p-6 text-red-400">
+                  ⚠️ Failed to load courses from database.
+                </div>
+              ) : (
+                <CourseGrid courses={courses ?? []} />
+              )}
+            </Suspense>
+          </section>
         </div>
       </main>
     </div>
-  );
+  )
 }

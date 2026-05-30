@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LearnOS — Student Learning Dashboard
 
-## Getting Started
+A futuristic, highly animated student dashboard built with Next.js 15, Supabase, and Framer Motion.
 
-First, run the development server:
+## Live Demo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+[Deploy link here]
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Next.js 15** — App Router, Server Components
+- **Supabase** — PostgreSQL database, real-time data
+- **Tailwind CSS v4** — utility-first styling
+- **Framer Motion** — spring physics animations
+- **Lucide React** — icons
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Architecture
 
-## Learn More
+### Server / Client Split
 
-To learn more about Next.js, take a look at the following resources:
+Data fetching happens exclusively in `app/page.tsx` (Server Component) using `async/await`.
+No data fetching on the client — zero waterfall requests.
+Animation wrappers (`CourseGrid`, `CourseTile`, `HeroTile`) are marked `'use client'` for Framer Motion.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Component Tree
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+\`\`\`
+page.tsx (Server)
+├── Sidebar (Client)
+├── HeroTile (Client)
+├── ActivityTile (Client)
+├── OverallProgressTile (Client)
+└── CourseGrid (Client)
+└── CourseTile (Client)
+\`\`\`
 
-## Deploy on Vercel
+## Setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Clone the repo
+2. Copy \`.env.example\` to \`.env.local\`
+3. Add your Supabase credentials
+4. \`npm install && npm run dev\`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Challenges
+
+- Keeping Server/Client boundary clean while passing Supabase data to animated components
+- Achieving zero layout shifts with Framer Motion spring animations
+- Tailwind CSS v4 config differences from v3
